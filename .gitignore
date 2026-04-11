@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Results (raw data committed intentionally — ignore temp files)
+results/*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Large model files — check sizes before committing
+# If any .h5 file exceeds 100MB, use git-lfs or exclude here
+# *.h5
