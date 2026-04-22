@@ -15,6 +15,7 @@ Python 3.9 or higher recommended.
 | numpy | >=1.23 | Numerical operations |
 | scipy | >=1.9 | Wilcoxon signed-rank test |
 | matplotlib | >=3.6 | Results figures |
+| pytest | >=7.0 | Test suite |
 
 ## Installation
 
