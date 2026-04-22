@@ -48,7 +48,7 @@ def run_dt(config, budget, model, X, seed_ratio=0.15):
 
     # --- random seed sampling ---
     seed_inputs, seed_labels = [], []
-    idi_count = 0
+    seen_discriminatory = set()
 
     for _ in range(seed_n):
         sample_a = X.iloc[np.random.randint(len(X))].copy()
@@ -60,7 +60,8 @@ def run_dt(config, budget, model, X, seed_ratio=0.15):
 
         seed_inputs.append(sample_a.values)
         seed_labels.append(label)
-        idi_count += label
+        if label:
+            seen_discriminatory.add(tuple(sample_a.values))
 
     seed_inputs = np.array(seed_inputs)
     seed_labels = np.array(seed_labels)
@@ -86,9 +87,11 @@ def run_dt(config, budget, model, X, seed_ratio=0.15):
 
             pred_a = model.predict(sample_a.values.reshape(1, -1), verbose=0)[0][0]
             pred_b = model.predict(sample_b.values.reshape(1, -1), verbose=0)[0][0]
-            idi_count += int(abs(pred_a - pred_b) > 0.05)
+            if abs(pred_a - pred_b) > 0.05:
+                seen_discriminatory.add(tuple(sample_a.values))
             remaining -= 1
 
+    idi_count = len(seen_discriminatory)
     return {
         "idi_ratio": idi_count / budget if budget > 0 else 0.0,
         "idi_count": idi_count,
