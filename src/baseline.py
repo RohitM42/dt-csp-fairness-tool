@@ -40,7 +40,6 @@ def run_baseline(config, budget, model, X):
             inputs_generated — int
     """
     sensitive = config["sensitive"]
-    primary_sensitive = sensitive[0]
     non_sensitive = [c for c in X.columns if c not in sensitive]
 
     sensitive_unique_vals = {col: X[col].unique() for col in sensitive}
@@ -50,7 +49,7 @@ def run_baseline(config, budget, model, X):
 
     for _ in range(budget):
         sample_a, sample_b = _generate_pair(
-            X, primary_sensitive, non_sensitive,
+            X, sensitive, non_sensitive,
             sensitive_unique_vals, domains
         )
         if sample_a is None:
@@ -70,22 +69,17 @@ def run_baseline(config, budget, model, X):
     }
 
 
-def _generate_pair(X, primary_sensitive, non_sensitive, sensitive_unique_vals, domains):
+def _generate_pair(X, sensitive, non_sensitive, sensitive_unique_vals, domains):
     """
-    Generate a pair of inputs differing only on the primary sensitive feature.
+    Generate a pair of inputs differing only on the sensitive features.
+    All sensitive features are flipped simultaneously, matching the approach
+    used by DT, CSP, and Hybrid, and consistent with lab4_solution.py.
 
-    Mode "none":   takes a real data row, flips sensitive feature.
-    Mode "random": takes a real data row for sensitive feature value,
-                   randomises all non-sensitive features within [min, max].
+    Mode "none":   takes a real data row, flips all sensitive features.
+    Mode "random": takes a real data row, randomises all non-sensitive
+                   features within [min, max], then flips all sensitive features.
     """
     row = X.iloc[np.random.randint(len(X))].copy().astype(float)
-
-    current_val = row[primary_sensitive]
-    other_vals = [
-        v for v in sensitive_unique_vals[primary_sensitive] if v != current_val
-    ]
-    if not other_vals:
-        return None, None
 
     if PERTURBATION_MODE == "random":
         for col in non_sensitive:
@@ -94,7 +88,19 @@ def _generate_pair(X, primary_sensitive, non_sensitive, sensitive_unique_vals, d
 
     sample_a = row.values.copy()
     sample_b = sample_a.copy()
-    col_idx = list(X.columns).index(primary_sensitive)
-    sample_b[col_idx] = float(np.random.choice(other_vals))
+    col_indices = list(X.columns)
+
+    any_flipped = False
+    for col in sensitive:
+        current_val = row[col]
+        other_vals = [v for v in sensitive_unique_vals[col] if v != current_val]
+        if not other_vals:
+            continue
+        idx = col_indices.index(col)
+        sample_b[idx] = float(np.random.choice(other_vals))
+        any_flipped = True
+
+    if not any_flipped:
+        return None, None
 
     return sample_a, sample_b

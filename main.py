@@ -48,7 +48,7 @@ def _method_kwargs(method_name, seed_ratio):
     return {}
 
 
-def run_experiment(dataset_name, method_names, budget, n_runs, seed_ratio):
+def run_experiment(dataset_name, method_names, budget, n_runs, seed_ratio, results_dir="results"):
     """
     Load the dataset and model once, then run baseline + each requested
     method for n_runs trials, compare with Wilcoxon, and print a summary.
@@ -61,16 +61,17 @@ def run_experiment(dataset_name, method_names, budget, n_runs, seed_ratio):
     print(f"Dataset : {dataset_name.upper()}")
     print(f"Budget  : {budget}   Runs: {n_runs}")
     print(f"Methods : {', '.join(method_names)}")
+    print(f"Results : {results_dir}/")
     print(f"{'=' * 60}")
 
     df = pd.read_csv(config["data_path"])
     X = df.drop(columns=[config["target"]])
     model = keras.models.load_model(config["model_path"])
 
-    os.makedirs("results", exist_ok=True)
+    os.makedirs(results_dir, exist_ok=True)
 
     # Baseline — run once and share across all method comparisons for this dataset
-    baseline_path = f"results/{dataset_name}_baseline.csv"
+    baseline_path = f"{results_dir}/{dataset_name}_baseline.csv"
     print(f"\n[Baseline] {n_runs} trials  ->  {baseline_path}")
     t0 = time.time()
     baseline_ratios = run_trials(
@@ -85,7 +86,7 @@ def run_experiment(dataset_name, method_names, budget, n_runs, seed_ratio):
     for method_name in method_names:
         fn, label, _ = _METHOD_REGISTRY[method_name]
         kwargs = _method_kwargs(method_name, seed_ratio)
-        method_path = f"results/{dataset_name}_{method_name}.csv"
+        method_path = f"{results_dir}/{dataset_name}_{method_name}.csv"
 
         print(f"\n[{label}] {n_runs} trials  ->  {method_path}")
         t0 = time.time()
@@ -161,16 +162,21 @@ def main():
             f"in DT and Hybrid (default: {DEFAULT_SEED_RATIO})"
         ),
     )
+    parser.add_argument(
+        "--results-dir", default="results",
+        dest="results_dir",
+        help="Directory to save result CSVs (default: results)",
+    )
     args = parser.parse_args()
 
     datasets = list(DATASET_CONFIGS.keys()) if args.dataset == "all" else [args.dataset]
     methods = ["dt", "csp", "hybrid"] if args.method == "all" else [args.method]
 
     all_summaries = []
-    summary_path = "results/summary.csv"
+    summary_path = f"{args.results_dir}/summary.csv"
     for dataset in datasets:
         summaries = run_experiment(
-            dataset, methods, args.budget, args.runs, args.seed_ratio
+            dataset, methods, args.budget, args.runs, args.seed_ratio, args.results_dir
         )
         all_summaries.extend(summaries)
         if all_summaries:
