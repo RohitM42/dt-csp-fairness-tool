@@ -107,6 +107,28 @@ Key parameters in `src/config.py`:
 | `DT_MAX_DEPTH`       | `4`    | Decision tree max depth |
 | `DIVERSITY_K`        | `1`    | Min features that must differ from any known discriminatory input (CSP diversity constraint) |
 
+## Group Fairness Characterisation
+
+A standalone script is provided to profile each model's group-level bias before running IDI
+search. It computes two metrics per sensitive feature:
+
+- **Demographic Parity Difference (DPD)** — max difference in positive prediction rate across
+  sensitive attribute groups. Does not require ground truth labels.
+- **Equalized Odds Difference (EOD)** — max of TPR difference and FPR difference across groups.
+  Requires the ground truth target column (already present in all dataset CSVs).
+
+```bash
+# Characterise all configured datasets
+python characterise.py
+
+# Single dataset
+python characterise.py --dataset adult
+```
+
+Results are printed as a table per dataset and saved to `characterisation.csv` at the repo root.
+This script is intended as a one-time characterisation pass; re-running it produces the same
+output (no randomness involved).
+
 ## Testing
 
 The test suite covers all modules with 135 tests total. No real datasets or `.h5` model

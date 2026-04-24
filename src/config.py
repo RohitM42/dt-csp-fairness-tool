@@ -37,6 +37,24 @@ DATASET_CONFIGS = {
         "model_path": "DNN/model_processed_dutch.h5",
         "data_path": "dataset/processed_dutch.csv",
     },
+    "communities_crime": {
+        "sensitive": ["Black"],  # single sensitive; racial composition of community
+        "target": "class",
+        "model_path": "DNN/model_processed_communities_crime.h5",
+        "data_path": "dataset/processed_communities_crime.csv",
+    },
+    "credit": {
+        "sensitive": ["SEX", "AGE"],  # SEX is binary; AGE is continuous
+        "target": "class",
+        "model_path": "DNN/model_processed_credit.h5",
+        "data_path": "dataset/processed_credit_with_numerical.csv",
+    },
+    "law_school": {
+        "sensitive": ["race", "male"],  # race is encoded; male is binary (0/1)
+        "target": "pass_bar",
+        "model_path": "DNN/model_processed_law_school_cleaned.h5",
+        "data_path": "dataset/processed_law_school.csv",
+    },
 }
 
 # Budget used by baseline — keep consistent across all comparisons
