@@ -1,5 +1,3 @@
-collect_ignore = ["tests/test_baseline.py"]
-
 import warnings
 
 
