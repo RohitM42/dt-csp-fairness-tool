@@ -121,10 +121,10 @@ Key parameters in `src/config.py`:
 
 | Parameter       | Default | Description |
 |-----------------|---------|-------------|
-| `DEFAULT_BUDGET`     | `1000` | Total inputs per run |
-| `DEFAULT_SEED_RATIO` | `0.15` | Phase 1 seed fraction |
-| `DT_MAX_DEPTH`       | `4`    | Decision tree max depth |
-| `DIVERSITY_K`        | `1`    | Min features that must differ from any known discriminatory input (CSP diversity constraint) |
+| `DEFAULT_BUDGET`     | `1000` | Total inputs per run — imported by `main.py` as the `--budget` default |
+| `DEFAULT_SEED_RATIO` | `0.15` | Phase 1 seed fraction — imported by `main.py` as the `--seed-ratio` default |
+| `DT_MAX_DEPTH`       | `4`    | Reference value documenting the `max_depth` default in `dt.train_dt()` — not imported at runtime; change the default in `src/dt.py` directly to override |
+| `DIVERSITY_K`        | `1`    | Reference value documenting the `k` default in `csp.add_diversity_constraint()` — not imported at runtime; change the argument in `src/csp.py` directly to override |
 
 ## Group Fairness Characterisation
 
@@ -150,7 +150,7 @@ output (no randomness involved).
 
 ## Testing
 
-The test suite covers all modules with 135 tests total. No real datasets or `.h5` model
+The test suite covers all modules with 147 tests total. No real datasets or `.h5` model
 files are required — tests use `MockModel` fixtures and synthetic `pandas` DataFrames.
 
 ```bash
@@ -162,6 +162,7 @@ python -m pytest tests/test_dt.py       -v   # 33 tests
 python -m pytest tests/test_csp.py      -v   # 47 tests
 python -m pytest tests/test_hybrid.py   -v   # 24 tests
 python -m pytest tests/test_evaluate.py -v   # 31 tests
+python -m pytest tests/test_baseline.py -v   # 12 tests
 ```
 
 scipy and numpy RuntimeWarnings (e.g. Wilcoxon on all-zero differences) are suppressed

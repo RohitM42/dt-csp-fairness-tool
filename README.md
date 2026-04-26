@@ -67,6 +67,17 @@ python -m pytest tests/ -v
 | `test_hybrid.py`   | 24    |
 | `test_evaluate.py` | 31    |
 
+## Results
+
+| Folder | Datasets | Methods | Baseline | Status |
+|--------|----------|---------|----------|--------|
+| `results_full/` | All 8 | All | All-sensitive flip | **Authoritative** |
+| `results_v3/` | Credit, Communities & Crime, Law School | Mixed | All-sensitive flip | Reference only |
+| `results_v2/` | KDD, Adult, COMPAS, Dutch, German | DT + baseline | All-sensitive flip | Reference only |
+| `results_v1/` | KDD, Adult, COMPAS, Dutch, German | All | Single-attribute flip | Reference only |
+
+Each folder contains a README.md with further detail. All report figures are sourced from `results_full/`.
+
 ## Dependencies
 
 See `requirements.txt` and `requirements.pdf` for full dependency details.

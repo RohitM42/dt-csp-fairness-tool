@@ -42,6 +42,7 @@ return |seen| / S
 ## Notes
 
 - The candidate pool size `5 * S_guided` scales with the remaining budget, so it shrinks naturally as the budget depletes.
+- In the implementation, `S_seed` is computed as `max(1, floor(r * S))` to guarantee at least one seed sample regardless of budget or ratio. This only differs from `floor(r * S)` when the product rounds to zero (i.e. very small budgets or ratios near zero).
 - Sensitive features are all flipped simultaneously (intersectional counterfactual).
 - The hash set `seen` spans both phases; IDIs found during seeding count toward the final ratio.
 - The DT is trained once after the seed phase and is not updated online.

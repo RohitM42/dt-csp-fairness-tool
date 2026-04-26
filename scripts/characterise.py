@@ -8,8 +8,8 @@ characterisation pass to profile model-level bias before running IDI search.
 Outputs a summary table to terminal and saves characterisation.csv at repo root.
 
 Usage:
-    python characterise.py                    # all datasets
-    python characterise.py --dataset adult    # single dataset
+    python scripts/characterise.py                    # all datasets
+    python scripts/characterise.py --dataset adult    # single dataset
 """
 
 import argparse

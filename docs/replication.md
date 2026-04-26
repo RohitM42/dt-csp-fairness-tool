@@ -118,10 +118,14 @@ Full 20-run results (budget=1000) from `results_full/`. All methods use all-sens
 flip. p-values from Wilcoxon signed-rank test (paired, two-sided), Bonferroni-corrected
 threshold α≈0.008 (0.05/6 primary comparisons).
 
-> **Note:** Authoritative results are from `results_full/` (all 8 datasets, corrected
-> all-sensitive baseline, 20 runs each). Earlier partial runs in `results/` (5 datasets,
-> single-attribute baseline flip) and `results_v2/` (5 datasets, all-sensitive flip) are
-> retained for reference only and should not be used for comparison with the report.
+> **Note:** Authoritative results are from `results_full/` (all 8 datasets, all methods,
+> corrected all-sensitive baseline, 20 runs each). Three earlier partial runs are retained
+> for reference only and should not be used for report comparisons:
+> - `results_v1/` — 5 datasets (KDD, Adult, COMPAS, Dutch, German), all methods, old single-attribute baseline flip
+> - `results_v2/` — same 5 datasets, DT + baseline only, corrected all-sensitive baseline
+> - `results_v3/` — 3 remaining datasets (Credit, Communities & Crime, Law School), mixed methods, corrected baseline
+>
+> Each folder contains a README.md with further detail.
 
 ### DT vs Baseline (`results_full/`)
 
