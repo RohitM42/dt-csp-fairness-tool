@@ -14,14 +14,14 @@ Steps to exactly reproduce the results reported in the paper.
 No fixed global seed is used. Each run independently samples from the dataset and the solver
 uses random objectives each iteration. Results are averaged over `--runs` independent trials
 (default 20) and compared with a Wilcoxon signed-rank test. Trial-to-trial variance is low
-(see std columns in `results/summary.csv`).
+(see std columns in `results_full/summary.csv`).
 
 ## Steps
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<username>/csp-fairness-tool.git
-   cd csp-fairness-tool
+   git clone https://github.com/RohitM42/dt-csp-fairness-tool.git
+   cd dt-csp-fairness-tool
    ```
 
 2. Install dependencies:
@@ -37,14 +37,20 @@ uses random objectives each iteration. Results are averaged over `--runs` indepe
    python main.py --dataset all --method all --budget 1000 --runs 20
    ```
 
-   This is the recommended single command. The baseline is run once per dataset and shared
-   across all three method comparisons. Results are saved incrementally after each run and
-   the summary CSV is updated after each dataset completes, so an interrupted run preserves
-   all completed datasets.
+   This is the recommended single command. `--dataset all` covers all 8 datasets (6 primary +
+   Law School + Communities & Crime). The baseline is run once per dataset and shared across
+   all three method comparisons. Results are saved incrementally after each run and the summary
+   CSV is updated after each dataset completes, so an interrupted run preserves all completed
+   datasets.
 
    **To save to a custom directory (e.g. to preserve a previous run):**
    ```bash
    python main.py --dataset all --method all --budget 1000 --runs 20 --results-dir results_v2
+   ```
+
+   **To run only the 6 primary datasets (comma-separated list):**
+   ```bash
+   python main.py --dataset kdd,adult,compas,dutch,credit,german --method all --budget 1000 --runs 20
    ```
 
    **Alternatively, run one dataset at a time:**
@@ -54,6 +60,7 @@ uses random objectives each iteration. Results are averaged over `--runs` indepe
    python main.py --dataset compas --method all --budget 1000 --runs 20
    python main.py --dataset german --method all --budget 1000 --runs 20
    python main.py --dataset dutch  --method all --budget 1000 --runs 20
+   python main.py --dataset credit --method all --budget 1000 --runs 20
    ```
 
    **For targeted re-runs of a single method:**
@@ -107,65 +114,66 @@ this was corrected to match the reference and the three comparison methods.
 
 ## Expected Results
 
-Full 20-run results (budget=1000) from `results_v2/`. All methods use all-sensitive-feature
+Full 20-run results (budget=1000) from `results_full/`. All methods use all-sensitive-feature
 flip. p-values from Wilcoxon signed-rank test (paired, two-sided), Bonferroni-corrected
-threshold α=0.01 (5 comparisons).
+threshold α≈0.008 (0.05/6 primary comparisons).
 
-> **Note:** v1 results (in `results/`) used a single-attribute baseline flip (primary
-> sensitive only). v2 results use all-sensitive flip for baseline, consistent with
-> `lab4_solution.py` and the three comparison methods. Baseline IDI ratios are substantially
-> higher in v2. DT/CSP/Hybrid values are unchanged between v1 and v2.
->
-> CSP and Hybrid results below are from v1 (20-run) experiments — the code was not modified
-> so results are directly comparable to the v2 baseline.
->
+> **Note:** Authoritative results are from `results_full/` (all 8 datasets, corrected
+> all-sensitive baseline, 20 runs each). Earlier partial runs in `results/` (5 datasets,
+> single-attribute baseline flip) and `results_v2/` (5 datasets, all-sensitive flip) are
+> retained for reference only and should not be used for comparison with the report.
 
-### DT vs Baseline (v2, primary results — `results_v2/`)
+### DT vs Baseline (`results_full/`)
 
 | Dataset | Baseline mean ± std | DT mean ± std | p-value | Significant |
-|---------|--------------------|--------------:|---------|-------------|
-| adult   | 0.4619 ± 0.0191 | 0.5682 ± 0.0257 | 8.84e-05 | Yes |
-| compas  | 0.5882 ± 0.0167 | 0.6587 ± 0.0200 | 8.84e-05 | Yes |
-| dutch   | 0.0201 ± 0.0042 | 0.1595 ± 0.0458 | 1.03e-04 | Yes |
-| german  | 0.3910 ± 0.0091 | 0.3482 ± 0.0352 | 1.30e-04 | Yes (DT lower) |
-| kdd     | 0.5598 ± 0.0163 | 0.6482 ± 0.0341 | 8.83e-05 | Yes |
+|---------|---------------------|---------------|---------|-------------|
+| kdd     | 0.5660 ± 0.0126 | 0.6557 ± 0.0357 | 1.91e-06 | Yes |
+| adult   | 0.4682 ± 0.0170 | 0.5630 ± 0.0309 | 1.91e-06 | Yes |
+| compas  | 0.5893 ± 0.0121 | 0.6662 ± 0.0213 | 8.82e-05 | Yes |
+| dutch   | 0.0220 ± 0.0043 | 0.1350 ± 0.0563 | 5.72e-06 | Yes |
+| credit  | 0.0783 ± 0.0108 | 0.1775 ± 0.0310 | 8.84e-05 | Yes |
+| german  | 0.3898 ± 0.0154 | 0.3382 ± 0.0285 | 1.03e-04 | Yes (DT lower) |
 
-### CSP and Hybrid vs Baseline (v1 method results, v2 corrected baseline)
+### CSP and Hybrid vs Baseline (`results_full/`)
 
-| Dataset | Baseline (v2) | CSP mean ± std | Hybrid mean ± std |
-|---------|--------------|---------------|------------------|
-| adult   | 0.4619 | 0.212 ± 0.015 | 0.268 ± 0.025 |
-| compas  | 0.5882 | 0.427 ± 0.017 | 0.455 ± 0.034 |
-| dutch   | 0.0201 | 0.029 ± 0.006 | 0.085 ± 0.030 |
-| german  | 0.3910 | 0.235 ± 0.013 | 0.288 ± 0.019 |
-| kdd     | 0.5598 | 0.041 ± 0.007 | 0.124 ± 0.018 |
+> †Law School is ablation-only: DT and baseline both achieve IDI ≈ 0.000 on real data rows.
+
+| Dataset | Baseline | CSP mean ± std | Hybrid mean ± std |
+|---------|----------|----------------|-------------------|
+| kdd     | 0.5660 | 0.0395 ± 0.0066 | 0.1215 ± 0.0125 |
+| adult   | 0.4682 | 0.2180 ± 0.0145 | 0.2698 ± 0.0283 |
+| compas  | 0.5893 | 0.4398 ± 0.0182 | 0.4567 ± 0.0283 |
+| dutch   | 0.0220 | 0.0332 ± 0.0038 | 0.0761 ± 0.0327 |
+| credit  | 0.0783 | 0.1505 ± 0.0104 | 0.1587 ± 0.0220 |
+| german  | 0.3898 | 0.2318 ± 0.0150 | 0.2823 ± 0.0282 |
+| law school† | 0.0000 | 0.0199 ± 0.0040 | 0.0179 ± 0.0049 |
 
 ## Key Findings
 
-- **DT outperforms the corrected baseline on 4 of 5 datasets**, with statistically
-  significant improvements on all 4 (Wilcoxon, p < 0.001 in each case). Improvements
-  range from +12% (COMPAS) to +694% proportionally (Dutch). DT achieves this at
-  comparable runtime to the baseline — the DT training overhead is negligible.
+- **DT outperforms the baseline on 5 of 6 primary datasets**, with statistically significant
+  improvements on all 6 (Wilcoxon, all p < 0.001). Improvements range from +13% (COMPAS)
+  to +515% (Dutch). DT achieves this at comparable runtime to the baseline — the DT
+  training overhead is negligible across all primary datasets (range: −0.6% to +2.4%).
 
-- **German is the only dataset where DT underperforms the baseline** (0.348 vs 0.391,
-  −10.9%). This is attributed to three factors: the small dataset size (1,000 rows) causing
+- **German is the only dataset where DT underperforms the baseline** (0.338 vs 0.390,
+  −13.3%). This is attributed to three factors: the small dataset size (1,000 rows) causing
   heavy resampling in the guided phase; a relatively uniform discrimination density that
   leaves the DT with no concentrated subspace to identify; and a multi-valued sensitive
   feature (PersonStatusSex, 0–3) creating a mismatch between DT threshold splits and the
   random flip operation.
 
-- **CSP underperforms the corrected baseline on 4 of 5 datasets.** The root cause is a
-  domain/distribution mismatch: CP-SAT generates inputs uniformly within `[min, max]`
-  feature bounds, while the DNN's discrimination is concentrated on the real data
-  distribution. On KDD (19 features, 284k rows), CSP achieves only 0.041 vs baseline 0.560.
-  Performance is better on smaller, lower-dimensional datasets (COMPAS: 0.427 vs 0.588;
-  Dutch: 0.029 vs 0.020).
+- **CSP underperforms the baseline on 4 of 6 primary datasets** (KDD, Adult, COMPAS,
+  German). The root cause is a domain/distribution mismatch: CP-SAT generates inputs
+  uniformly within `[min, max]` feature bounds, while the DNN's discrimination is
+  concentrated on the real data distribution. On KDD (36 features, 285k rows), CSP achieves
+  only 0.040 vs baseline 0.566. CSP exceeds the baseline on Dutch (+51%) and Credit (+92%),
+  where the discriminatory subspace is more accessible to solver-based search.
 
-- **Hybrid underperforms the corrected baseline on 4 of 5 datasets**, beating it only on
-  Dutch. Hybrid's Phase 2 uses CSP constrained to DT-identified rule regions — which is
-  better than unconstrained CSP but still generates synthetic inputs that sit off the real
-  data distribution. DT-only outperforms Hybrid because DT Phase 2 continues sampling
-  real data rows, not synthetic ones.
+- **Hybrid underperforms the baseline on 4 of 6 primary datasets** (same pattern as CSP),
+  beating it on Dutch and Credit. Hybrid's Phase 2 uses CSP constrained to DT-identified
+  rule regions — better than unconstrained CSP but still generating synthetic inputs off the
+  real data distribution. DT-only outperforms Hybrid on all six primary datasets because
+  DT Phase 2 continues sampling real data rows, not synthetic ones.
 
 - **DT is the recommended method.** It is black-box (no model internals required),
   interpretable (extracted decision rules describe which feature combinations drive

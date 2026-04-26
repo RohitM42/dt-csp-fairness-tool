@@ -1,7 +1,7 @@
 """
 test_dt.py — Tests for dt.py: decision tree fairness testing (Phase 1).
 
-Run from the csp-fairness-tool/ directory:
+Run from the dt-csp-fairness-tool/ directory:
     python -m pytest tests/test_dt.py -v
 
 Covers:

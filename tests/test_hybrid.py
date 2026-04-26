@@ -1,7 +1,7 @@
 """
 test_hybrid.py — Tests for hybrid.py: Phase 1 (DT) + Phase 2 (CSP) combined.
 
-Run from the csp-fairness-tool/ directory:
+Run from the dt-csp-fairness-tool/ directory:
     python -m pytest tests/test_hybrid.py -v
 
 Covers:

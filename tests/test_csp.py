@@ -1,7 +1,7 @@
 """
 test_csp.py — Tests for csp.py: CP-SAT fairness testing (Phase 2).
 
-Run from the csp-fairness-tool/ directory:
+Run from the dt-csp-fairness-tool/ directory:
     python -m pytest tests/test_csp.py -v
 
 Covers:

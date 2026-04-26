@@ -1,5 +1,5 @@
 """
-main.py — Entry point for csp-fairness-tool.
+main.py — Entry point for dt-csp-fairness-tool.
 
 Runs one or more fairness-testing methods against the random-search baseline,
 saves per-run IDI ratios to results/, and prints a Wilcoxon comparison summary.
@@ -134,8 +134,7 @@ def main():
     )
     parser.add_argument(
         "--dataset", required=True,
-        choices=list(DATASET_CONFIGS.keys()) + ["all"],
-        help="Dataset to evaluate, or 'all' for every dataset",
+        help="Dataset to evaluate: single name, comma-separated list, or 'all'",
     )
     parser.add_argument(
         "--method", default="hybrid",
@@ -169,7 +168,10 @@ def main():
     )
     args = parser.parse_args()
 
-    datasets = list(DATASET_CONFIGS.keys()) if args.dataset == "all" else [args.dataset]
+    datasets = list(DATASET_CONFIGS.keys()) if args.dataset == "all" else [d.strip() for d in args.dataset.split(",")]
+    invalid = [d for d in datasets if d not in DATASET_CONFIGS]
+    if invalid:
+        parser.error(f"Unknown dataset(s): {', '.join(invalid)}. Valid: {', '.join(DATASET_CONFIGS.keys())}")
     methods = ["dt", "csp", "hybrid"] if args.method == "all" else [args.method]
 
     all_summaries = []

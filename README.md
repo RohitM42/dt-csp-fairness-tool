@@ -1,4 +1,4 @@
-# csp-fairness-tool
+# dt-csp-fairness-tool
 
 A Decision Tree + CSP hybrid approach to AI fairness testing, developed as part of the
 Intelligent Software Engineering (ISE) module.
@@ -23,16 +23,21 @@ creating a comparison pair, consistent with `lab4_solution.py`.
 
 ## Datasets
 
-KDD, Adult, COMPAS, German, Dutch
+**Primary (6):** KDD, Adult, COMPAS, German, Dutch, Credit
+
+**Ablation (2):** Law School, Communities & Crime
 
 ## Usage
 
 ```bash
-# Full experiment — all datasets, all methods, baseline shared per dataset
+# Full experiment — all 8 datasets, all methods, baseline shared per dataset
 python main.py --dataset all --method all --budget 1000 --runs 20
 
 # Save to a custom directory (to avoid overwriting a previous run)
 python main.py --dataset all --method all --budget 1000 --runs 20 --results-dir results_v2
+
+# Multiple specific datasets (comma-separated)
+python main.py --dataset kdd,adult,compas,dutch,credit,german --method all --budget 1000 --runs 20
 
 # Single dataset, all methods
 python main.py --dataset kdd --method all

@@ -37,10 +37,11 @@ No GPU required. All experiments run on CPU only. Approximate wall-clock runtime
 | adult   | ~44 min | ~43 min | ~87 min |
 | compas  | ~42 min | ~42 min | ~84 min |
 | dutch   | ~39 min | ~39 min | ~78 min |
+| credit  | ~39 min | ~39 min | ~78 min |
 | german  | ~47 min | ~40 min | ~87 min |
 | kdd     | ~40 min | ~44 min | ~84 min |
 
-CSP and Hybrid methods are slower due to CP-SAT solver overhead (~197s/run observed on German). Running `--method all` across all 5 datasets will take several hours and is best left as an overnight run.
+CSP and Hybrid methods are slower due to CP-SAT solver overhead (~197s/run observed on German). Running `--dataset all --method all` covers all 8 datasets (including Law School and Communities & Crime ablation datasets) and will take several hours — best left as an overnight run. To run only the 6 primary datasets, specify them individually or as a comma-separated list (e.g. `--dataset kdd,adult,compas,dutch,credit,german`).
 
 ---
 

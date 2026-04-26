@@ -1,7 +1,7 @@
 """
 test_baseline.py — Unit tests for baseline.py random search.
 
-Run from the csp-fairness-tool/ directory:
+Run from the dt-csp-fairness-tool/ directory:
     python -m pytest tests/test_baseline.py -v
 
 Covers:

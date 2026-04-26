@@ -2,7 +2,7 @@
 
 ## Overview
 
-`csp-fairness-tool` finds Individual Discriminatory Instances (IDIs) in pre-trained neural
+`dt-csp-fairness-tool` finds Individual Discriminatory Instances (IDIs) in pre-trained neural
 network models. An IDI is a pair of inputs identical except for a sensitive feature (e.g.,
 gender, race, age) where the model's output differs by more than 0.05 — indicating the model
 treats people differently based on a protected characteristic.
@@ -35,23 +35,37 @@ content around the trade-offs of constraint-based vs data-driven search.
 ## Required Files
 
 **Datasets** (`dataset/`):
+
+Primary (required for main experiment):
 - `processed_kdd.csv`
 - `processed_adult.csv`
 - `processed_compas.csv`
 - `processed_german.csv`
 - `processed_dutch.csv`
+- `processed_credit_with_numerical.csv`
+
+Ablation only (required for `--dataset all`):
+- `processed_communities_crime.csv`
+- `processed_law_school.csv`
 
 **Models** (`DNN/`):
+
+Primary:
 - `model_processed_kdd_cleaned.h5`
 - `model_processed_adult.h5`
 - `model_processed_compas.h5`
 - `model_processed_greman_cleaned.h5`  ← note: typo in source filename, keep as-is
 - `model_processed_dutch.h5`
+- `model_processed_credit.h5`
+
+Ablation only:
+- `model_processed_communities_crime.h5`
+- `model_processed_law_school_cleaned.h5`
 
 ## Running the Tool
 
 ```bash
-# Full experiment — all datasets, all methods (recommended)
+# Full experiment — all 8 datasets, all methods (recommended; expect several hours)
 python main.py --dataset all --method all --budget 1000 --runs 20
 
 # Full experiment saving to a separate folder (e.g. to preserve a previous run)
@@ -59,6 +73,9 @@ python main.py --dataset all --method all --budget 1000 --runs 20 --results-dir 
 
 # All three methods vs baseline on a single dataset (baseline shared, run once)
 python main.py --dataset kdd --method all --budget 1000 --runs 20
+
+# Multiple specific datasets (comma-separated, spaces optional)
+python main.py --dataset kdd,adult,compas --method all --budget 1000 --runs 20
 
 # Single method vs baseline
 python main.py --dataset kdd --method dt     --budget 1000 --runs 20
@@ -69,11 +86,13 @@ python main.py --dataset kdd --method hybrid --budget 1000 --runs 20
 python main.py --dataset adult --method all --runs 3 --results-dir results_test
 ```
 
+> **Note:** `--dataset all` runs all 8 datasets (KDD, Adult, COMPAS, Dutch, Credit, German, Law School, Communities & Crime). Law School and Communities & Crime are ablation-only datasets; to run only the 6 primary datasets, either specify them individually or use a comma-separated list.
+
 **Arguments:**
 
 | Argument        | Default    | Description |
 |-----------------|------------|-------------|
-| `--dataset`     | required   | `kdd`, `adult`, `compas`, `german`, `dutch`, or `all` |
+| `--dataset`     | required   | Single dataset name, comma-separated list (e.g. `kdd,adult,compas`), or `all` (all 8 datasets) |
 | `--method`      | `hybrid`   | `dt`, `csp`, `hybrid`, or `all` |
 | `--budget`      | `1000`     | Total inputs generated per run |
 | `--runs`        | `20`       | Independent trials per method (min 20 for meaningful Wilcoxon p-values) |

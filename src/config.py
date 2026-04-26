@@ -1,5 +1,5 @@
 """
-config.py — Dataset configurations for csp-fairness-tool.
+config.py — Dataset configurations for dt-csp-fairness-tool.
 
 Each config entry defines paths, sensitive features, and target column
 for a supported dataset. The tool is dataset-agnostic; all dataset-specific

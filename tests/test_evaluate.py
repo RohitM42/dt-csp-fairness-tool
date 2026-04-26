@@ -1,7 +1,7 @@
 """
 test_evaluate.py — Tests for evaluate.py: run_trials, compare, save_results.
 
-Run from the csp-fairness-tool/ directory:
+Run from the dt-csp-fairness-tool/ directory:
     python -m pytest tests/test_evaluate.py -v
 
 All tests use lightweight mock callables and synthetic data — no real datasets
