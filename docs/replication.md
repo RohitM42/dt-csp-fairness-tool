@@ -81,7 +81,7 @@ uses random objectives each iteration. Results are averaged over `--runs` indepe
 To reproduce the group-level bias characterisation (DPD and EOD per sensitive feature):
 
 ```bash
-python characterise.py
+python scripts/characterise.py
 ```
 
 Output is printed to the terminal and saved to `characterisation.csv` at the repo root.

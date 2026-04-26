@@ -138,10 +138,10 @@ search. It computes two metrics per sensitive feature:
 
 ```bash
 # Characterise all configured datasets
-python characterise.py
+python scripts/characterise.py
 
 # Single dataset
-python characterise.py --dataset adult
+python scripts/characterise.py --dataset adult
 ```
 
 Results are printed as a table per dataset and saved to `characterisation.csv` at the repo root.
