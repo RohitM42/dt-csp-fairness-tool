@@ -46,12 +46,11 @@ python main.py --dataset kdd --method all
 python main.py --dataset kdd --method dt
 ```
 
-See `manual.md` for full usage, arguments, and configuration details.
+See `manual.pdf` for full usage, arguments, and configuration details.
 
 ## Replication
 
-See `replication.md` for exact reproduction steps and preliminary results
-(export to `replication.pdf` for submission).
+See `replication.pdf` for exact reproduction steps and expected results.
 
 ## Tests
 
@@ -70,4 +69,4 @@ python -m pytest tests/ -v
 
 ## Dependencies
 
-See `requirements.txt` and `requirements.md` (export to `requirements.pdf` for submission).
+See `requirements.txt` and `requirements.pdf` for full dependency details.

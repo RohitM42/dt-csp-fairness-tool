@@ -30,7 +30,7 @@ uses random objectives each iteration. Results are averaged over `--runs` indepe
    ```
 
 3. Place the required dataset CSVs in `dataset/` and model files in `DNN/`
-   (see `manual.md` for exact filenames).
+   (see `manual.pdf` for exact filenames).
 
 4. Run the full experiment — all datasets, all methods, baseline shared per dataset:
    ```bash
@@ -181,5 +181,3 @@ threshold α≈0.008 (0.05/6 primary comparisons).
   over random search.
 
 ---
-
-> Export this file to `replication.pdf` and place at repo root before submission.

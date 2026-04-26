@@ -168,5 +168,3 @@ scipy and numpy RuntimeWarnings (e.g. Wilcoxon on all-zero differences) are supp
 via `conftest.py` and do not indicate failures.
 
 ---
-
-> Export this file to `manual.pdf` and place at repo root before submission.
