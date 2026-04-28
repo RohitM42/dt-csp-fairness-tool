@@ -96,6 +96,15 @@ Key values to verify:
 
 ---
 
+## Non-Sensitive Feature Perturbation — Methodology Note
+
+`baseline.py` supports two generation modes controlled by `PERTURBATION_MODE`:
+
+- `"none"` *(default, used for all reported results)*: samples real data rows and flips sensitive features only — no modification to non-sensitive features.
+- `"random"`: randomises each non-sensitive feature independently by sampling uniformly within its observed `[min, max]` range before flipping sensitive features.
+
+The `"none"` mode is correct for IDI detection. The `"random"` mode, analogous in intent to the ±10% range perturbation applied by the reference `lab4_solution.py`, collapses IDI signal substantially — displacing inputs off the real data distribution removes them from the regions where model discrimination concentrates (KDD IDI < 0.01 in preliminary runs). All results in `results_full/` use `PERTURBATION_MODE = "none"`.
+
 ## IDI Counting — Methodology Note
 
 All methods count **unique discriminatory inputs** only. A discriminatory pair `(a, b)` is
